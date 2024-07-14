@@ -4,9 +4,21 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"grpc-go/proto"
 	"grpc-go/types"
 	"net/http"
+
+	"google.golang.org/grpc"
 )
+
+func NewGRPCClient(remoteAdd string) (proto.PriceFetcherClient, error) {
+	conn, err := grpc.Dial(remoteAdd, grpc.WithInsecure())
+	if err != nil {
+		return nil, err
+	}
+	c := proto.NewPriceFetcherClient(conn)
+	return c, nil
+}
 
 type Client struct {
 	endpoint string
